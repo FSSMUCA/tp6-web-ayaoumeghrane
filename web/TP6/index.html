@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Calculatrice Web</title>
+
+    
+   
+
+</head>
+
+<body>
+
+<header>
+    <h1>Mini Calculatrice Web</h1>
+</header>
+
+<main>
+
+    <!-- SECTION CALCULATRICE -->
+    <section class="card">
+        <h2>Calculatrice</h2>
+
+        <div id="errorBox" class="error"></div>
+
+        <form id="calcForm">
+            <label for="numberA">Nombre A :</label>
+            <input type="number" id="numberA">
+
+            <label for="numberB">Nombre B :</label>
+            <input type="number" id="numberB">
+
+            <label for="operation">Opération :</label>
+            <select id="operation">
+                <option value="+">Addition (+)</option>
+                <option value="-">Soustraction (−)</option>
+                <option value="*">Multiplication (×)</option>
+                <option value="/">Division (÷)</option>
+            </select>
+
+            <button type="submit">Calculer</button>
+        </form>
+
+        <h3>Résultat :</h3>
+        <div id="resultBox" class="result"></div>
+    </section>
+
+    <!-- SECTION HISTORIQUE -->
+    <section class="card">
+        <h2>Historique des opérations</h2>
+        <ul id="historyList"></ul>
+    </section>
+
+</main>
+
+<footer>
+    <a href="info.php" style="color:#00c3ff;">Voir la page PHP</a>
+</footer>
+
+<!-- JAVASCRIPT INCORPORÉ → IMPOSSIBLE À NE PAS FONCTIONNER -->
+<script>
+    const form = document.getElementById("calcForm");
+    const errorBox = document.getElementById("errorBox");
+    const resultBox = document.getElementById("resultBox");
+    const historyList = document.getElementById("historyList");
+
+    let history = [];
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        errorBox.textContent = "";
+        resultBox.textContent = "";
+
+        let a = document.getElementById("numberA").value;
+        let b = document.getElementById("numberB").value;
+        let op = document.getElementById("operation").value;
+
+        if (a === "" || b === "") {
+            errorBox.textContent = "Veuillez remplir les deux nombres.";
+            return;
+        }
+
+        a = parseFloat(a);
+        b = parseFloat(b);
+
+        if (op === "/" && b === 0) {
+            errorBox.textContent = "Division par zéro interdite.";
+            return;
+        }
+
+        let result;
+        switch (op) {
+            case "+": result = a + b; break;
+            case "-": result = a - b; break;
+            case "*": result = a * b; break;
+            case "/": result = a / b; break;
+        }
+
+        resultBox.textContent = result;
+
+        const entry = `${a} ${op} ${b} = ${result}`;
+        history.push(entry);
+
+        updateHistory();
+    });
+
+    function updateHistory() {
+        historyList.innerHTML = "";
+        history.forEach(item => {
+            let li = document.createElement("li");
+            li.textContent = item;
+            historyList.appendChild(li);
+        });
+    }
+</script>
+<script src="app.js"></script>
+
+</body>
+</html>
